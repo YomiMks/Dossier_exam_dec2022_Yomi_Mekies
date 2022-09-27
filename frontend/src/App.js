@@ -7,6 +7,7 @@ import Permissions from "./pages/Permissions";
 import Partners from "./pages/Partners";
 import Structures from "./pages/Structures";
 import CssBaseline from "@mui/material/CssBaseline";
+import ResponsiveAppBar from "./components/surface/ResponsiveAppBar";
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
   return (
     <div className="App">
         <CssBaseline />
+        <ResponsiveAppBar />
         <Routes>
             <Route path={"/"} element={<SignIn />}/>
             <Route path={"/dashboard"} element={<Dashboard />}/>

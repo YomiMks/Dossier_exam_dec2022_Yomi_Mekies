@@ -1,5 +1,4 @@
 import React from 'react';
-import ResponsiveAppBar from "../components/surface/ResponsiveAppBar";
 import BasicTable from "../components/dataDisplay/BasicTable";
 import {Container} from "@mui/material";
 
@@ -7,7 +6,6 @@ import {Container} from "@mui/material";
 const Dashboard = () => {
     return (
         <div>
-            <ResponsiveAppBar />
             <div>
                 <Container maxWidth={'lg'}>
                     <h3>Derniers partenaires ajouté</h3>
