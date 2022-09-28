@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import EnhancedTable from "../components/dataDisplay/EnhancedTable";
 import { Container } from "@mui/material";
 import Modal from "../components/utils/modal";
