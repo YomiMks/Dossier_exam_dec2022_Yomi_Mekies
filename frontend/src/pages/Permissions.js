@@ -1,8 +1,8 @@
-
+import EnhancedTable from '../components/dataDisplay/DataGrid';
 const Permissions = () => {
     return (
         <div>
-            <h1>Permissions</h1>
+            <EnhancedTable />
         </div>
     )
 }

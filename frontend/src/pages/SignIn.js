@@ -4,14 +4,14 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { useNavigate } from 'react-router-dom';
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -28,6 +28,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 const SignIn = () => {
+    const navigation = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -35,6 +36,11 @@ const SignIn = () => {
             email: data.get('email'),
             password: data.get('password'),
         });
+        localStorage.setItem('auth', JSON.stringify({
+            isLogged: true
+        }))
+
+        navigation('/dashboard')
     };
 
     return (
@@ -85,9 +91,7 @@ const SignIn = () => {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            <Link to={'/dashboard'}>
-                                Sign In
-                            </Link>
+                            Sign In
                         </Button>
                         <Grid container>
                             <Grid item xs>
