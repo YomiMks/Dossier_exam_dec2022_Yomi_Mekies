@@ -1,7 +1,9 @@
 const express = require('express');
 const sequelize = require('./config/db.js');
 const userModel = require('./src/models/userModel.js')
-
+const partnersModel = require('./src/models/partnersModel.js')
+const permissionsModel = require('./src/models/permissionsModel.js')
+const structuresModel = require('./src/models/structuresModel.js')
 
 const app = express();
 

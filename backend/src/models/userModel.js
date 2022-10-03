@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../../config/db')
-
+const sequelize = require('../../config/db');
+const StructuresModel = require('./structuresModel');
+const PartnersModel = require('./PartnersModel');
 const User = sequelize.define('User', {
     // Model attributes are defined here
     id: {
@@ -25,88 +26,39 @@ const User = sequelize.define('User', {
     brand: {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    structureId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: StructuresModel,
+            key: 'id'
+        }
+    },
+    partnersId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: PartnersModel,
+            key: 'id'
+        }
     }
 }, {
     timestamps: true
 });
 
-const Partners = sequelize.define('Partners', {
-    // Model attributes are defined here
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    city: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    enabled: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    }
-}, {
-    timestamps: true
-});
 
 //ejjejee
 
-const Structures = sequelize.define('Structures', {
-    // Model attributes are defined here
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    description: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    enabled: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    enabled: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    }
-}, {
-    timestamps: true
-});
-
-const Permission = sequelize.define('Permission', {
-    // Model attributes are defined here
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    Permission: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-}, {
-    timestamps: true
-});
-
 
 // syncro table
-User.sync()
+
+User.belongsTo(StructuresModel, {foreignKey: 'structureId', as: 'user_structure'})
+StructuresModel.hasOne(User, {foreignKey: 'structureId', as: 'structure_user'})
+
+User.belongsTo(PartnersModel, {foreignKey: 'partnersId', as: 'user_partners'})
+PartnersModel.hasOne(User, {foreignKey: 'partnersId', as: 'partners_user'})
 // User.sync({ force: true })
 // `sequelize.define` also returns the model
 console.log('dd', User === sequelize.models.User); // true
-console.log('dd', Partners === sequelize.models.Partners); // true
-console.log('dd', Structures === sequelize.models.Structures); // true
-console.log('dd', Permission === sequelize.models.Permission); // true
-console.log(performance)
+User.sync({force: true})
