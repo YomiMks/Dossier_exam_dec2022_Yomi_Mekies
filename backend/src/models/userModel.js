@@ -60,5 +60,6 @@ User.belongsTo(PartnersModel, {foreignKey: 'partnersId', as: 'user_partners'})
 PartnersModel.hasOne(User, {foreignKey: 'partnersId', as: 'partners_user'})
 // User.sync({ force: true })
 // `sequelize.define` also returns the model
+User.sync()
 console.log('dd', User === sequelize.models.User); // true
-User.sync({force: true})
+module.exports = User;

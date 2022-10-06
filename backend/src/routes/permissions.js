@@ -3,8 +3,9 @@ permissionRoutes = express.Router()
 permissionController = require('../controllers/permissionController.js');
 
 module.exports = (app) => {
-    permissionRoutes.get('/permission', permissionController.getPermission)
+    permissionRoutes.get('/', permissionController.getPermission)
+    permissionRoutes.post('/', permissionController.newPermission)
 
-
-    app.use('/api', permissionRoutes)
+    app.use('/api/permission', permissionRoutes)
 }
+

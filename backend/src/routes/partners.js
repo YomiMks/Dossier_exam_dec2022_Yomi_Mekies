@@ -3,8 +3,8 @@ partnerRoutes = express.Router()
 partnerController = require('../controllers/partnerController.js');
 
 module.exports = (app) => {
-    partnerRoutes.get('/partner', partnerController.getPartner)
+    partnerRoutes.get('/', partnerController.getPartner)
+    partnerRoutes.post('/', partnerController.newPartner)
 
-
-    app.use('/api', partnerRoutes)
+    app.use('/api/partners', partnerRoutes)
 }

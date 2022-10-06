@@ -39,12 +39,8 @@ const Structures = sequelize.define('Structures', {
     timestamps: true
 });
 
-Structures.sync()
-
-
 Structures.belongsTo(PartnersModel, {foreignKey: 'partnersId', as: 'structure_partners'})
 PartnersModel.hasMany(Structures, {foreignKey: 'partnersId', as: 'partners_structure'})
-
+Structures.sync()
 console.log('dd', Structures === sequelize.models.Structures); // true
 module.exports = Structures;
-

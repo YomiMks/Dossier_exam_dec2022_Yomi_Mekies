@@ -3,8 +3,7 @@ structureRoutes = express.Router()
 structuresController = require('../controllers/structureController.js');
 
 module.exports = (app) => {
-    structureRoutes.get('/structure', structureController.getStructure)
+    structureRoutes.get('/', structuresController.getStructure)
 
-
-    app.use('/api', structureRoutes)
+    app.use('/api/structure', structureRoutes)
 }

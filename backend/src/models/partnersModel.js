@@ -25,6 +25,5 @@ const Partners = sequelize.define('Partners', {
     timestamps: true
 });
 Partners.sync()
-
 console.log('Partners', Partners === sequelize.models.Partners); // true
 module.exports = Partners;
