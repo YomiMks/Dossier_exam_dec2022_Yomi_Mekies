@@ -2,6 +2,7 @@ const Partners = require("../models/partnersModel");
 const User = require('../models/userModel'),
     bcrypt = require('bcrypt'),
     saltRounds = 10;
+
 exports.newPartner = async (req, res) => {
     // verifier si luser exist deja
     const isExistPartner = await Partners.findOne({
