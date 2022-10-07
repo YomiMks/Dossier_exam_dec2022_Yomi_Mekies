@@ -2,7 +2,6 @@ import React from 'react';
 import BasicTable from "../components/dataDisplay/BasicTable";
 import {Container} from "@mui/material";
 
-
 const Dashboard = () => {
     return (
         <div>

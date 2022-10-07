@@ -1,12 +1,13 @@
 const express = require('express');
 const sequelize = require('./config/db.js');
+const cors = require('cors')
 
 const app = express();
 
 //app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
-
+app.use(cors())
 require('./src/routes/index')(app)
 
 app.get('/', (req, res) => {

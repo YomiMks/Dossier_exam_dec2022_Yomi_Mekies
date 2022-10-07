@@ -17,6 +17,6 @@ exports.login = async (req, res) => {
             }
         });
     }else {
-        return res.status(400).json({user: 'BAD REQUEST'});
+        return res.status(400).json({user: 'User not found'});
     }
 }

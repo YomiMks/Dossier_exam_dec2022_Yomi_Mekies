@@ -31,7 +31,8 @@ const pages = [
 ];
 const settings = [ 'Logout'];
 
-const ResponsiveAppBar = () => {
+const ResponsiveAppBar = (props) => {
+    const {user} = props
     const navigate = useNavigate();
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -51,8 +52,10 @@ const ResponsiveAppBar = () => {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = () => {
+    const handleCloseUserMenuLogout = () => {
         setAnchorElUser(null);
+        localStorage.clear()
+        navigate('/')
     };
 
     return (
@@ -74,7 +77,7 @@ const ResponsiveAppBar = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        L'orange bleue
+                        {user.brand}
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -108,10 +111,10 @@ const ResponsiveAppBar = () => {
                         >
                             {
                                 pages.map((page, index) => (
-                                <MenuItem key={index} onClick={(e) => handleCloseNavMenu(e, page.link)}>
-                                    <Typography textAlign="center"  href="/">{page.page}</Typography>
-                                </MenuItem>
-                            ))
+                                    <MenuItem key={index} onClick={(e) => handleCloseNavMenu(e, page.link)}>
+                                        <Typography textAlign="center"  href="/">{page.page}</Typography>
+                                    </MenuItem>
+                                ))
                             }
                         </Menu>
                     </Box>
@@ -146,7 +149,7 @@ const ResponsiveAppBar = () => {
                         ))}
                     </Box>
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
+                        <Tooltip title={user.email}>
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                             </IconButton>
@@ -165,10 +168,9 @@ const ResponsiveAppBar = () => {
                                 horizontal: 'right',
                             }}
                             open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                <MenuItem key={setting} onClick={handleCloseUserMenuLogout}>
                                     <Typography textAlign="center">{setting}</Typography>
                                 </MenuItem>
                             ))}

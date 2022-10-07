@@ -12,12 +12,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import {useState} from "react";
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
             <Link color="inherit" href="https://mui.com/">
-                Your Website
+                Orange bleu
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -28,21 +29,45 @@ function Copyright(props) {
 const theme = createTheme();
 
 const SignIn = () => {
+    const [error, setError] = useState(false);
     const navigation = useNavigate();
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+        if(data.get('email').length <= 0 || data.get('password') <= 0){
+            return setError('Champ vide')
+        }
+        const login = await fetchApiLogin({
             email: data.get('email'),
             password: data.get('password'),
-        });
-        localStorage.setItem('auth', JSON.stringify({
-            isLogged: true
-        }))
-
-        navigation('/dashboard')
+        })
+        if(login){
+            navigation('/dashboard')
+        }
     };
-
+    const fetchApiLogin = async (data) => {
+      console.log(data)
+        const response = await fetch('http://localhost:8343/api/auth/login',{
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        if(response.ok){
+            const result = await response.json()
+            localStorage.setItem('auth', JSON.stringify({
+                isLogged: true,
+                user: result.user
+            }))
+            return true
+        }else{
+            console.log('erreur')
+            setError("Une erreur c'est produite");
+            return false
+        }
+    }
     return (
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
@@ -93,18 +118,12 @@ const SignIn = () => {
                         >
                             Sign In
                         </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
-                        </Grid>
+                        {
+                            error !== false &&
+                            <Typography component="h1" variant="h5">
+                                {error}
+                            </Typography>
+                        }
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
