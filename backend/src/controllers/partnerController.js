@@ -1,5 +1,6 @@
 const Partners = require("../models/partnersModel");
 const User = require('../models/userModel'),
+    partnersHasPermission = require('../models/partnersHasPermission'),
     bcrypt = require('bcrypt'),
     saltRounds = 10;
 
@@ -12,6 +13,7 @@ exports.newPartner = async (req, res) => {
     });
     if(isExistPartner) return res.status(400).json({msg: 'PARTENAIRE DEJA EXISTANT'})
     try {
+        let newPartnersHasPermission;
         const newPartner = await Partners.create({
             city: req.body.city,
             enabled: true,
@@ -24,7 +26,15 @@ exports.newPartner = async (req, res) => {
             role: 'PARTNERS',
             partnersId: newPartner.id
         })
-        return res.status(200).json({msg: 'OK', newUSer, newPartner })
+        if(req.body.permissions.length > 0){
+            for ( const res of req.body.permissions){
+                newPartnersHasPermission = await partnersHasPermission.create({
+                    'fk_partner_id' : newPartner.id,
+                    'fk_permission_id': res
+                })
+            }
+        }
+        return res.status(200).json({msg: 'OK', newUSer, newPartner, newPartnersHasPermission })
     }catch (e){
         return res.status(400).json({msg: 'ERROR', message: e.message})
     }

@@ -1,5 +1,7 @@
 const Structures = require("../models/structuresModel");
 const User = require('../models/userModel'),
+    structuresHasPermission = require('../models/structuresHasPermission')
+const partnersHasPermission = require("../models/partnersHasPermission");
     bcrypt = require('bcrypt'),
     saltRounds = 10;
 
@@ -12,6 +14,7 @@ exports.newStructure = async (req, res) => {
     });
     if(isExistStructure) return res.status(400).json({msg: 'STRUCTURE DEJA EXISTANTe'})
     try {
+        let newStructuresHasPermission;
         const newStructure = await Structures.create({
             address: req.body.address,
             description: req.body.description,
@@ -26,7 +29,15 @@ exports.newStructure = async (req, res) => {
             role: 'STRUCTURE',
             structureId: newStructure.id
         })
-        return res.status(200).json({msg: 'OK', newUSer, newStructure })
+        if(req.body.permissions.length > 0){
+            for ( const res of req.body.permissions){
+                newStructuresHasPermission = await structuresHasPermission.create({
+                    'fk_structure_id' : newStructure.id,
+                    'fk_permission_id': res
+                })
+            }
+        }
+        return res.status(200).json({msg: 'OK', newUSer, newStructure, newStructuresHasPermission })
     }catch (e){
         return res.status(400).json({msg: 'ERROR', message: e.message})
     }
