@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
 
 const style = {
     position: 'absolute',
@@ -26,11 +27,40 @@ const BasicModal = (props) => {
         >
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Text in a modal
+                    Ajouter un nouveau partenaire
                 </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                </Typography>
+                <div style={{display: 'flex', marginTop: '16px', marginBottom: '16px'}}>
+                    <TextField
+                        required
+                        id="outlined-required"
+                        label="Ville"
+                        onChange={(e) => props.handleChange('city', e.target.value)}
+                    />
+                    <TextField
+                        required
+                        id="outlined-required"
+                        label="Nom"
+                        onChange={(e) => props.handleChange('name', e.target.value)}
+                    />
+                </div>
+                <div style={{display: 'flex'}}>
+                    <TextField
+                        required
+                        id="outlined-required"
+                        label="Email"
+                        onChange={(e) => props.handleChange('email', e.target.value)}
+                    />
+                    <TextField
+                        required
+                        id="outlined-required"
+                        onChange={(e) => props.handleChange('password', e.target.value)}
+                        label="Mot de passe"
+                        type="password"
+                    />
+                </div>
+                <Button variant="contained" onClick={props.handleClose}>Annuler</Button>
+                <Button variant="contained" onClick={(e) => props.handleAddPartner(e)}>Valider</Button>
+                {props.error !== false && props.error}
             </Box>
         </Modal>
     );

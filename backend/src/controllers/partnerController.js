@@ -18,15 +18,16 @@ exports.newPartner = async (req, res) => {
             city: req.body.city,
             enabled: true,
             name: req.body.name,
+            userId: req.body.userId,
         })
         const hash = bcrypt.hashSync(req.body.password, saltRounds);
-        const newUSer = await User.create({
+        const newUser = await User.create({
             email: req.body.email,
             password: hash,
             role: 'PARTNERS',
             partnersId: newPartner.id
         })
-        if(req.body.permissions.length > 0){
+        if(req.body?.permissions.length > 0){
             for ( const res of req.body.permissions){
                 newPartnersHasPermission = await partnersHasPermission.create({
                     'fk_partner_id' : newPartner.id,
@@ -34,7 +35,7 @@ exports.newPartner = async (req, res) => {
                 })
             }
         }
-        return res.status(200).json({msg: 'OK', newUSer, newPartner, newPartnersHasPermission })
+        return res.status(200).json({msg: 'OK', newUser, newPartner, newPartnersHasPermission })
     }catch (e){
         return res.status(400).json({msg: 'ERROR', message: e.message})
     }
