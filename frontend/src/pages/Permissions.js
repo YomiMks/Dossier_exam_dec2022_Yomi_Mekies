@@ -1,8 +1,12 @@
-import EnhancedTable from '../components/dataDisplay/DataGrid';
-const Permissions = () => {
+import DataGrid from '../components/dataDisplay/DataGrid';
+import {Container} from "@mui/material";
+const Permissions = (props) => {
+    const {permissionsData} = props
     return (
         <div>
-            <EnhancedTable />
+            <Container maxWidth={'lg'}>
+                <DataGrid permissionsData={permissionsData}/>
+            </Container>
         </div>
     )
 }

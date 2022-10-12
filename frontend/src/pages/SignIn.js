@@ -45,7 +45,6 @@ const SignIn = () => {
         }
     };
     const fetchApiLogin = async (data) => {
-      console.log(data)
         const response = await fetch('http://localhost:8343/api/auth/login',{
             method: "POST",
             headers: {
@@ -62,7 +61,6 @@ const SignIn = () => {
             }))
             return true
         }else{
-            console.log('erreur')
             setError("Une erreur c'est produite");
             return false
         }

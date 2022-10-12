@@ -80,34 +80,16 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'name',
+    id: 'nom',
     numeric: false,
     disablePadding: true,
-    label: 'Dessert (100g serving)',
+    label: 'Nom',
   },
   {
-    id: 'calories',
+    id: 'Ville',
     numeric: true,
     disablePadding: false,
-    label: 'Calories',
-  },
-  {
-    id: 'fat',
-    numeric: true,
-    disablePadding: false,
-    label: 'Fat (g)',
-  },
-  {
-    id: 'carbs',
-    numeric: true,
-    disablePadding: false,
-    label: 'Carbs (g)',
-  },
-  {
-    id: 'protein',
-    numeric: true,
-    disablePadding: false,
-    label: 'Protein (g)',
+    label: 'Ville',
   },
 ];
 
@@ -197,9 +179,14 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          Partenaires
         </Typography>
       )}
+      <p className={'msg-success'}>
+      {
+        props.msgSuccess && props.msgSuccess
+      }
+      </p>
       {props.handleOpen && <Button variant="contained" onClick={props.handleOpen}>Ajouter</Button>}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
@@ -295,6 +282,7 @@ const EnhancedTable = (props) => {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
+                msgSuccess={props.msgSuccess}
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
@@ -305,7 +293,7 @@ const EnhancedTable = (props) => {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(props.partnersData, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -338,10 +326,7 @@ const EnhancedTable = (props) => {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{row.city}</TableCell>
                       <TableCell align="right">
                         <FormControlLabel
                           control={<Switch checked={dense} onChange={handleChangeDense} />}

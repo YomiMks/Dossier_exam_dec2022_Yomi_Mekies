@@ -12,13 +12,32 @@ import ResponsiveAppBar from "./components/surface/ResponsiveAppBar";
 function App() {
   const [isLogged, setIsLogged] = useState(localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).isLogged)
   const [user, setUser] = useState(localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).user)
-  console.log("isLogged", isLogged)
+  const [permissionsData, setPermissionsData] = useState([])
   useEffect(() => {
-    console.log('islogd')
+    fetchApiGetPermissions()
+  }, []);
+
+  useEffect(() => {
     setIsLogged(isLogged)
 
   }, [localStorage.getItem('auth')]);
 
+  const fetchApiGetPermissions = async () => {
+    const response = await fetch('http://localhost:8343/api/permission', {
+      method: "GET",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    if (response.ok) {
+      const result = await response.json()
+      setPermissionsData(result)
+      return true
+    } else {
+      return false
+    }
+  }
   return (
     <div className="App">
       <CssBaseline />
@@ -29,9 +48,9 @@ function App() {
             <ResponsiveAppBar user={user} />
             <Routes>
               <Route path={"/dashboard"} element={<Dashboard />} />
-              <Route path={"/structures"} element={<Structures />} />
-              <Route path={"/partners"} element={<Partners />} />
-              <Route path={"/permissions"} element={<Permissions />} />
+              <Route path={"/structures"} element={<Structures  permissionsData={permissionsData}/>} />
+              <Route path={"/partners"} element={<Partners permissionsData={permissionsData}/>} />
+              <Route path={"/permissions"} element={<Permissions permissionsData={permissionsData}/>} />
               <Route path={'*'} element={<Error />} />
             </Routes>
           </div>

@@ -4,6 +4,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
+import Checkbox from "@mui/material/Checkbox";
+import {useState} from "react";
+import {FormControlLabel, FormGroup} from "@mui/material";
 
 const style = {
     position: 'absolute',
@@ -18,6 +21,8 @@ const style = {
 };
 
 const BasicModal = (props) => {
+    const [selected, setSelected] = useState([]);
+    const isSelected = (name) => selected.indexOf(name) !== -1;
     return (
         <Modal
             open={props.open}
@@ -57,6 +62,24 @@ const BasicModal = (props) => {
                         label="Mot de passe"
                         type="password"
                     />
+                </div>
+                <div>
+                    <FormGroup>
+                        {
+                            props.permissionsData.map((item, index) =>{
+                                    return (
+                                        <FormControlLabel
+                                            key={item.id}
+                                            onChange={(e) => props.handlePushPermission(e.target.value)}
+                                            control={
+                                            <Checkbox
+                                                value={item.id}
+                                                color="primary"
+                                            />} label={item.Permission} />)
+                                }
+                            )
+                        }
+                    </FormGroup>
                 </div>
                 <Button variant="contained" onClick={props.handleClose}>Annuler</Button>
                 <Button variant="contained" onClick={(e) => props.handleAddPartner(e)}>Valider</Button>

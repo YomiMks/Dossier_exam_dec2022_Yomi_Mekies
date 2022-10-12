@@ -44,5 +44,5 @@ exports.newPartner = async (req, res) => {
 
 
 exports.getPartner = async (req, res) => {
-    return res.status(200).json(Partners.findAll())
+    return res.status(200).json(await Partners.findAll())
 }

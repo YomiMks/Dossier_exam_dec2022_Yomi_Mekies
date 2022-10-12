@@ -1,10 +1,10 @@
 import React from 'react';
-import EnhancedTable from '../components/dataDisplay/DataGrid';
+import DataGridStructure from '../components/dataDisplay/DataGridStructure';
 
-const Structures = () => {
+const Structures = (props) => {
     return (
         <div>
-            <EnhancedTable />
+            <DataGridStructure structuresData={[]}/>
         </div>
     );
 };
