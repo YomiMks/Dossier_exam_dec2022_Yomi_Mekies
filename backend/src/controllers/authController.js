@@ -3,6 +3,7 @@ const User = require('../models/userModel'),
     saltRounds = 10;
 
 exports.login = async (req, res) => {
+    if(!req.body.email || !req.body.password) return res.status(400).json({msg: 'Empty body'});
     const findUser = await User.findOne({
         where: {
             email: req.body.email,

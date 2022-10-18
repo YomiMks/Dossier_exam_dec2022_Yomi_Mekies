@@ -104,6 +104,7 @@ const Partners = ({ permissionsData }) => {
                 setOpen={setOpen}
                 handleClose={handleClose}
                 handleOpen={handleOpen}
+                partnersData={partnersData}
                 handleChange={handleChange}
                 setFormPermissionsValue={setFormPermissionsValue}
                 formValue={formValue}

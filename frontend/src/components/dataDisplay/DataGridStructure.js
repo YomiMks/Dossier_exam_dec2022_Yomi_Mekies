@@ -21,6 +21,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import {Button} from "@mui/material";
 
 function createData(name, calories, fat, carbs, protein) {
     return {
@@ -80,10 +81,22 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'permission',
+        id: 'address',
         numeric: false,
         disablePadding: true,
-        label: 'Permission',
+        label: 'Adresse',
+    },
+    {
+        id: 'description',
+        numeric: false,
+        disablePadding: true,
+        label: 'Description',
+    },
+    {
+        id: 'name',
+        numeric: false,
+        disablePadding: true,
+        label: 'Nom',
     },
 ];
 
@@ -173,10 +186,10 @@ const EnhancedTableToolbar = (props) => {
                     id="tableTitle"
                     component="div"
                 >
-                    Nutrition
+                    Structures
                 </Typography>
             )}
-
+            {props.handleOpen && <Button variant="contained" onClick={props.handleOpen}>Ajouter</Button>}
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
                     <IconButton>
@@ -263,7 +276,7 @@ export default function EnhancedTable(props) {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar numSelected={selected.length} handleOpen={props.handleOpen} />
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -305,6 +318,30 @@ export default function EnhancedTable(props) {
                                                         'aria-labelledby': labelId,
                                                     }}
                                                 />
+                                            </TableCell>
+                                            <TableCell
+                                                component="th"
+                                                id={labelId}
+                                                scope="row"
+                                                padding="none"
+                                            >
+                                                {row.address}
+                                            </TableCell>
+                                            <TableCell
+                                                component="th"
+                                                id={labelId}
+                                                scope="row"
+                                                padding="none"
+                                            >
+                                                {row.description}
+                                            </TableCell>
+                                            <TableCell
+                                                component="th"
+                                                id={labelId}
+                                                scope="row"
+                                                padding="none"
+                                            >
+                                                {row.name}
                                             </TableCell>
                                             <TableCell
                                                 component="th"

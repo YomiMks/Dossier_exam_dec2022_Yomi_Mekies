@@ -8,6 +8,7 @@ import Partners from "./pages/Partners";
 import Structures from "./pages/Structures";
 import CssBaseline from "@mui/material/CssBaseline";
 import ResponsiveAppBar from "./components/surface/ResponsiveAppBar";
+import CircularIndeterminate from "./components/feedBack/CircularIndeterminate";
 
 function App() {
   const [isLogged, setIsLogged] = useState(localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).isLogged)

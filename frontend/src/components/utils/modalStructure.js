@@ -20,7 +20,7 @@ const style = {
     p: 4,
 };
 
-const BasicModal = (props) => {
+const ModalStructure = (props) => {
     const [selected, setSelected] = useState([]);
     const isSelected = (name) => selected.indexOf(name) !== -1;
     return (
@@ -32,14 +32,14 @@ const BasicModal = (props) => {
         >
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Ajouter un nouveau partenaire
+                    Ajouter une nouvelle structure
                 </Typography>
                 <div style={{display: 'flex', marginTop: '16px', marginBottom: '16px'}}>
                     <TextField
                         required
                         id="outlined-required"
-                        label="Ville"
-                        onChange={(e) => props.handleChange('city', e.target.value)}
+                        label="Adresse"
+                        onChange={(e) => props.handleChange('address', e.target.value)}
                     />
                     <TextField
                         required
@@ -47,7 +47,14 @@ const BasicModal = (props) => {
                         label="Nom"
                         onChange={(e) => props.handleChange('name', e.target.value)}
                     />
+                    <TextField
+                        required
+                        id="outlined-required"
+                        label="Description"
+                        onChange={(e) => props.handleChange('description', e.target.value)}
+                    />
                 </div>
+
                 <div style={{display: 'flex'}}>
                     <TextField
                         required
@@ -82,10 +89,12 @@ const BasicModal = (props) => {
                     </FormGroup>
                 </div>
                 <div>
-                    <select name="partnerId" id="partnerId">
+                    <select
+                        onChange={(e) => props.handleChange('partnersId', e.target.value)}
+                        name="partnerId" id="partnerId">
                         {
                             props.partnersData.map(item =>
-                                <option key={item.id} value={item.id}>{item.name}</option>
+                                <option key={item.id} value={item.id}>{item.city}</option>
                             )
                         }
                     </select>
@@ -97,4 +106,4 @@ const BasicModal = (props) => {
         </Modal>
     );
 }
-export default BasicModal;
+export default ModalStructure;

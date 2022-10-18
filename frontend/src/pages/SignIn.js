@@ -12,11 +12,14 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import {useState} from "react";
+import LoadingButton from '@mui/lab/LoadingButton';
+import CustomizedSnackbars from "../components/feedBack/SnackBarNotif";
+
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
+            <Link color="inherit" to="https://mui.com/" >
                 Orange bleu
             </Link>{' '}
             {new Date().getFullYear()}
@@ -29,20 +32,31 @@ const theme = createTheme();
 
 const SignIn = () => {
     const [error, setError] = useState(false);
+    const [msgSuccess, setMsgSuccess] = useState(false);
+    const [msg, setMsg] = useState('');
+    const [severity, setSeverity] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
     const navigation = useNavigate();
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true)
         const data = new FormData(event.currentTarget);
-        if(data.get('email').length <= 0 || data.get('password') <= 0){
-            return setError('Champ vide')
+        if (data.get('email').length <= 0 || data.get('password') <= 0) {
+            console.log('zef')
+            setMsg("Champs vide")
+            setSeverity('warning')
+            setOpen(true)
+        } else {
+            const login = await fetchApiLogin({
+                email: data.get('email'),
+                password: data.get('password'),
+            })
+            if (login) {
+                navigation('/dashboard')
+            }
         }
-        const login = await fetchApiLogin({
-            email: data.get('email'),
-            password: data.get('password'),
-        })
-        if(login){
-            navigation('/dashboard')
-        }
+        setLoading(false)
     };
     const fetchApiLogin = async (data) => {
         const response = await fetch('http://localhost:8343/api/auth/login',{
@@ -107,14 +121,16 @@ const SignIn = () => {
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
                         />
-                        <Button
+                        <LoadingButton
                             type="submit"
                             fullWidth
                             variant="contained"
+                            loadingPosition="end"
+                            loading={loading}
                             sx={{ mt: 3, mb: 2 }}
                         >
                             Sign In
-                        </Button>
+                        </LoadingButton >
                         {
                             error !== false &&
                             <Typography component="h1" variant="h5">
@@ -123,6 +139,7 @@ const SignIn = () => {
                         }
                     </Box>
                 </Box>
+                <CustomizedSnackbars msg={msg} severity={severity} open={open} setOpen={setOpen}/>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
             </Container>
         </ThemeProvider>
