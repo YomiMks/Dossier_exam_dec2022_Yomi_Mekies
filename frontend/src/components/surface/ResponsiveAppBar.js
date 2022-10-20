@@ -77,7 +77,7 @@ const ResponsiveAppBar = (props) => {
                             textDecoration: 'none',
                         }}
                     >
-                        {user.brand}
+                        {user.brand ?? ''}
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -149,7 +149,7 @@ const ResponsiveAppBar = (props) => {
                         ))}
                     </Box>
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title={user.email}>
+                        <Tooltip title={user.email ?? ''}>
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                             </IconButton>
