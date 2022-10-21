@@ -21,18 +21,18 @@ function App() {
   const [msgSuccess, setMsgSuccess] = useState(false);
   const [msg, setMsg] = useState('');
   const [error, setError] = useState(false);
-
   const [severity, setSeverity] = useState('');
+  const [partnersData, setPartnersData] = useState([]);
+
   useEffect(() => {
     setIsLogged(localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).isLogged)
-    setIsLogged(localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).user)
-    console.log("useEffect isLogged ===>>",isLogged)
+    setUser(localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).user)
   }, [localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).isLogged]);
   useEffect(() => {
     fetchApiGetPermissions()
+    fetchApiGetPartners()
+
   }, []);
-
-
 
   const fetchApiGetPermissions = async () => {
     const response = await fetch('http://localhost:8343/api/permission', {
@@ -50,6 +50,22 @@ function App() {
       return false
     }
   }
+  const fetchApiGetPartners = async () => {
+    const response = await fetch('http://localhost:8343/api/partners',{
+      method: "GET",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    if(response.ok){
+      const result = await response.json()
+      setPartnersData(result)
+      return true
+    }else{
+      return false
+    }
+  }
   return (
       <div className="App">
         <CssBaseline />
@@ -59,9 +75,21 @@ function App() {
               <div>
                 <ResponsiveAppBar user={user} />
                 <Routes>
-                  <Route index element={<Dashboard />} />
-                  <Route path={"/structures"} element={<Structures  permissionsData={permissionsData}/>} />
-                  <Route path={"/partners"} element={<Partners permissionsData={permissionsData}/>} />
+                  <Route index element={<Dashboard partnersData={partnersData}/>} />
+                  <Route path={"/structures"} element={<Structures  permissionsData={permissionsData} partnersData={partnersData}/>} />
+                  <Route path={"/partners"} element={
+                    <Partners
+                        loading={loading}
+                        setLoading={setLoading}
+                        msgSuccess={msgSuccess}
+                        setMsgSuccess={setMsgSuccess}
+                        severity={severity}
+                        setSeverity={setSeverity}
+                        error={error}
+                        setError={setError}
+                        partnersData={partnersData}
+                        setPartnersData={setPartnersData}
+                        permissionsData={permissionsData}/>} />
                   <Route path={"/permissions"} element={<Permissions permissionsData={permissionsData}/>} />
                   <Route path={'*'} element={<Error />} />
                 </Routes>

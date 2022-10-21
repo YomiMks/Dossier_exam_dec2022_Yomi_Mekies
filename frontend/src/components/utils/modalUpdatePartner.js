@@ -20,7 +20,7 @@ const style = {
     p: 4,
 };
 
-const BasicModal = (props) => {
+const ModalUpdatePartner = (props) => {
     const [selected, setSelected] = useState([]);
     const isSelected = (name) => selected.indexOf(name) !== -1;
     return (
@@ -32,13 +32,15 @@ const BasicModal = (props) => {
         >
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Ajouter un nouveau partenaire
+                    Modifier le partenaire {props.formValue.city}
                 </Typography>
                 <div style={{display: 'flex', marginTop: '16px', marginBottom: '16px'}}>
                     <TextField
                         required
                         id="outlined-required"
+                        shrink={false}
                         label="Ville"
+                        value={props.formValue.city}
                         onChange={(e) => props.handleChange('city', e.target.value)}
                     />
                     <TextField
@@ -88,4 +90,4 @@ const BasicModal = (props) => {
         </Modal>
     );
 }
-export default BasicModal;
+export default ModalUpdatePartner;

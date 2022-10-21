@@ -27,7 +27,7 @@ exports.newPartner = async (req, res) => {
             role: 'PARTNERS',
             partnersId: newPartner.id
         })
-        if(req.body?.permissions.length > 0){
+        if(req.body?.permissions?.length > 0){
             for ( const res of req.body.permissions){
                 newPartnersHasPermission = await partnersHasPermission.create({
                     'fk_partner_id' : newPartner.id,
@@ -40,9 +40,40 @@ exports.newPartner = async (req, res) => {
         return res.status(400).json({msg: 'ERROR', message: e.message})
     }
 }
-
-
-
+exports.deletePartner = async (req, res) => {
+    // verifier si luser exist deja
+    const isExistPartner = await Partners.findOne({
+        where : {
+            id: req.params.id,
+        }
+    });
+    if (!isExistPartner) return res.status(400).json({msg: 'BAD REQUEST'})
+    const deleteP = await Partners.destroy({
+        where:
+            { id: req.params.id}
+    })
+    if(deleteP){
+        return res.status(200).json({msg: 'OK'})
+    }
+    return res.status(400).json({msg: 'BAD REQUEST'})
+}
+exports.updatePartner = async (req, res) => {
+    const isExistPartner = await Partners.findOne({
+        where : {
+            id: req.params.id,
+        }
+    });
+    if (!isExistPartner) return res.status(400).json({msg: 'BAD REQUEST'})
+    try {
+        const uPartner = await Partners.update(
+            req.body, { where: { id: isExistPartner.id}}
+        )
+        return res.status(200).json(uPartner)
+    } catch (e) {
+        return res.status(400).json({msg: e.message})
+    }
+    return res.status(400).json({msg: 'BAD REQUEST'})
+}
 exports.getPartner = async (req, res) => {
     return res.status(200).json(await Partners.findAll())
 }

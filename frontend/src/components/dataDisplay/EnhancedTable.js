@@ -302,7 +302,6 @@ const EnhancedTable = (props) => {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -334,10 +333,10 @@ const EnhancedTable = (props) => {
                         />
                       </TableCell>
                       <TableCell align="right">
-                        <button>Modifier</button>
+                        <button onClick={() => props.handleOpenUpdate(row)}>Modifier</button>
                       </TableCell>
                       <TableCell align="right">
-                        <button>Supprimer</button>
+                        <button onClick={() => props.fetchApiDeletePartner(row.id)}>Supprimer</button>
                       </TableCell>
                     </TableRow>
                   );

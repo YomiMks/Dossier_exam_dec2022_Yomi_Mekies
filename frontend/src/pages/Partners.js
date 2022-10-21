@@ -2,27 +2,40 @@ import React, {useEffect, useState} from 'react';
 import EnhancedTable from "../components/dataDisplay/EnhancedTable";
 import { Container } from "@mui/material";
 import Modal from "../components/utils/modal";
+import ModalUpdatePartner from "../components/utils/modalUpdatePartner";
 // parent
-const Partners = ({ permissionsData }) => {
+const Partners = (props) => {
+    const {loading, setLoading, msgSuccess, setMsgSuccess, severity, setSeverity, error, setError, partnersData, setPartnersData, permissionsData} = props
 
     const [open, setOpen] = useState(false);
-    const [error, setError] = useState(false);
-    const [msgSuccess, setMsgSuccess] = useState(false);
+    const [openModalUpdate, setOpenModalUpdate] = useState(false);
+    const [formPermissionsValue, setFormPermissionsValue] = useState([]);
+
     const [formValue, setFormValue] = useState({
         city: '',
         name: '',
         email: '',
         password: '',
         userId: localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).user.id,
+        permissions: formPermissionsValue
     })
-    const [partnersData, setPartnersData] = useState([]);
-    const [formPermissionsValue, setFormPermissionsValue] = useState([]);
-    useEffect(() => {
-        fetchApiGetPartners()
-    }, []);
 
     const handleOpen = () => setOpen(true);
+    const handleOpenUpdate = (row) => {
+        console.log(row)
+        setFormValue(
+            {
+                city: row.city,
+                name: row.name,
+                email: row.email,
+                userId: row.userId,
+            }
+        )
+        setOpenModalUpdate(true)
+    };
+    console.log(formValue)
     const handleClose = () => setOpen(false);
+    const handleCloseUpdate = () => setOpenModalUpdate(false);
     const handleChange = (name, value) => {
         setFormValue({
             ...formValue,
@@ -56,17 +69,12 @@ const Partners = ({ permissionsData }) => {
             return false
         }
     }
-    const fetchApiGetPartners = async () => {
-        const response = await fetch('http://localhost:8343/api/partners',{
-            method: "GET",
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
+    const fetchApiDeletePartner = async (id) => {
+        const response = await fetch('http://localhost:8343/api/partners/' + id ,{method: "DELETE",})
         if(response.ok){
-            const result = await response.json()
-            setPartnersData(result)
+            const tmp = partnersData.filter(partner => partner.id !== id)
+            setPartnersData(tmp)
+            setMsgSuccess('Nouveau partenaire supprimé avec succès')
             return true
         }else{
             return false
@@ -86,7 +94,6 @@ const Partners = ({ permissionsData }) => {
         }
         setFormPermissionsValue(tmp)
     }
-    console.log("formPermissionsValue", formPermissionsValue)
 
     return (
         <div>
@@ -94,8 +101,10 @@ const Partners = ({ permissionsData }) => {
                 {/* child component  */}
                 <EnhancedTable
                     msgSuccess={msgSuccess}
-                    handleOpen={handleOpen} partnersData={partnersData
-                    .filter(partner => partner.userId == JSON.parse(localStorage.getItem('auth')).user.id)}/>
+                    handleOpen={handleOpen}
+                    handleOpenUpdate={handleOpenUpdate}
+                    fetchApiDeletePartner={fetchApiDeletePartner}
+                    partnersData={partnersData.filter(partner => partner.userId == JSON.parse(localStorage.getItem('auth')).user.id)}/>
             </Container>
             <Modal
                 permissionsData={permissionsData}
@@ -104,6 +113,20 @@ const Partners = ({ permissionsData }) => {
                 setOpen={setOpen}
                 handleClose={handleClose}
                 handleOpen={handleOpen}
+                partnersData={partnersData}
+                handleChange={handleChange}
+                setFormPermissionsValue={setFormPermissionsValue}
+                formValue={formValue}
+                handleAddPartner={handleAddPartner}
+                error={error}
+            />
+            <ModalUpdatePartner
+                permissionsData={permissionsData}
+                handlePushPermission={handlePushPermission}
+                open={openModalUpdate}
+                setOpen={setOpenModalUpdate}
+                handleClose={handleCloseUpdate}
+                handleOpen={handleOpenUpdate}
                 partnersData={partnersData}
                 handleChange={handleChange}
                 setFormPermissionsValue={setFormPermissionsValue}

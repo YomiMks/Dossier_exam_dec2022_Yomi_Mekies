@@ -98,6 +98,12 @@ const headCells = [
         disablePadding: true,
         label: 'Nom',
     },
+    {
+        id: 'partner',
+        numeric: false,
+        disablePadding: true,
+        label: 'Partenaire',
+    },
 ];
 
 function EnhancedTableHead(props) {
@@ -349,7 +355,7 @@ export default function EnhancedTable(props) {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                {row.Permission}
+                                                {props.partnersData.find(partner => partner.id === row.id)?.city}
                                             </TableCell>
                                         </TableRow>
                                     );

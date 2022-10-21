@@ -3,7 +3,8 @@ import DataGridStructure from '../components/dataDisplay/DataGridStructure';
 import {Container} from "@mui/material";
 import ModalStructure from "../components/utils/modalStructure";
 
-const Structures = ({permissionsData}) => {
+const Structures = ({permissionsData, partnersData}) => {
+    console.log('partnerData', partnersData)
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(false);
     const [msgSuccess, setMsgSuccess] = useState(false);
@@ -16,11 +17,9 @@ const Structures = ({permissionsData}) => {
         userId: localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).user.id,
         partnersId: ''
     })
-    const [partnersData, setPartnersData] = useState([]);
     const [structuresData, setStructureData] = useState([]);
     const [formPermissionsValue, setFormPermissionsValue] = useState([]);
     useEffect(() => {
-        fetchApiGetPartners();
         fetchApiGetStructure();
     }, []);
 
@@ -59,22 +58,6 @@ const Structures = ({permissionsData}) => {
             return false
         }
     }
-    const fetchApiGetPartners = async () => {
-        const response = await fetch('http://localhost:8343/api/partners',{
-            method: "GET",
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-        if(response.ok){
-            const result = await response.json()
-            setPartnersData(result)
-            return true
-        }else{
-            return false
-        }
-    }
     const fetchApiGetStructure = async () => {
         const response = await fetch('http://localhost:8343/api/structure',{
             method: "GET",
@@ -105,14 +88,16 @@ const Structures = ({permissionsData}) => {
         }
         setFormPermissionsValue(tmp)
     }
-
+    console.log(structuresData)
     return (
         <div>
             <Container maxWidth={'lg'}>
                 <DataGridStructure
                     msgSuccess={msgSuccess}
                     handleOpen={handleOpen}
+                    partnersData={partnersData}
                     structuresData={structuresData}
+
                 />
             </Container>
             <ModalStructure
