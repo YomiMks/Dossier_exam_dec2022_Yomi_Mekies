@@ -23,6 +23,8 @@ function App() {
   const [error, setError] = useState(false);
   const [severity, setSeverity] = useState('');
   const [partnersData, setPartnersData] = useState([]);
+  const [partnersPermissionsData, setPartnersPermisisonsData] = useState([]);
+  const [usersData, setUsersData] = useState([]);
 
   useEffect(() => {
     setIsLogged(localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).isLogged)
@@ -31,6 +33,8 @@ function App() {
   useEffect(() => {
     fetchApiGetPermissions()
     fetchApiGetPartners()
+    fetchApiGetUser()
+    fetchApiGetPartnersPermissions()
 
   }, []);
 
@@ -66,6 +70,38 @@ function App() {
       return false
     }
   }
+  const fetchApiGetUser = async () => {
+    const response = await fetch('http://localhost:8343/api/user',{
+      method: "GET",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    if(response.ok){
+      const result = await response.json()
+      setUsersData(result)
+      return true
+    }else{
+      return false
+    }
+  }
+  const fetchApiGetPartnersPermissions = async () => {
+    const response = await fetch('http://localhost:8343/api/partners/permissions',{
+      method: "GET",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    if(response.ok){
+      const result = await response.json()
+      setPartnersPermisisonsData(result)
+      return true
+    }else{
+      return false
+    }
+  }
   return (
       <div className="App">
         <CssBaseline />
@@ -79,6 +115,8 @@ function App() {
                   <Route path={"/structures"} element={<Structures  permissionsData={permissionsData} partnersData={partnersData}/>} />
                   <Route path={"/partners"} element={
                     <Partners
+                        partnersPermissionsData={partnersPermissionsData}
+                        usersData={usersData}
                         loading={loading}
                         setLoading={setLoading}
                         msgSuccess={msgSuccess}
@@ -106,8 +144,6 @@ function App() {
                           setMsg={setMsg}
                           severity={severity}
                           setSeverity={setSeverity}
-                          error={error}
-                          setError={setError}
                       />} />
                 <Route path={'*'} element={<Error />} />
               </Routes>

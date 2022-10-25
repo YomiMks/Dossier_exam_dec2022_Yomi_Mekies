@@ -5,7 +5,7 @@ import Modal from "../components/utils/modal";
 import ModalUpdatePartner from "../components/utils/modalUpdatePartner";
 // parent
 const Partners = (props) => {
-    const {loading, setLoading, msgSuccess, setMsgSuccess, severity, setSeverity, error, setError, partnersData, setPartnersData, permissionsData} = props
+    const {partnersPermissionsData, usersData, loading, setLoading, msgSuccess, setMsgSuccess, severity, setSeverity, error, setError, partnersData, setPartnersData, permissionsData} = props
 
     const [open, setOpen] = useState(false);
     const [openModalUpdate, setOpenModalUpdate] = useState(false);
@@ -22,18 +22,32 @@ const Partners = (props) => {
 
     const handleOpen = () => setOpen(true);
     const handleOpenUpdate = (row) => {
-        console.log(row)
+        let perms = []
+        let partnerPerms = partnersPermissionsData.filter(perm => perm.fk_partner_id === 4)
+        if (partnerPerms.length > 0){
+            permissionsData.map(item => {
+                partnerPerms.map(perm => {
+                    if(item.id === perm.fk_permission_id){
+                        perms.push(item)
+                    }
+                })
+            })
+        }
+        console.log('perms', perms)
+        // permissionsData
+        console.log("row", row)
         setFormValue(
             {
                 city: row.city,
                 name: row.name,
-                email: row.email,
                 userId: row.userId,
+                password: usersData.find(user => user?.user_partners?.id === row.id)?.password,
+                email: usersData.find(user => user?.user_partners?.id === row.id)?.email,
+                permissions: []
             }
         )
         setOpenModalUpdate(true)
     };
-    console.log(formValue)
     const handleClose = () => setOpen(false);
     const handleCloseUpdate = () => setOpenModalUpdate(false);
     const handleChange = (name, value) => {

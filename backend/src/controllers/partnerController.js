@@ -1,5 +1,6 @@
 const Partners = require("../models/partnersModel");
-const User = require('../models/userModel'),
+     User = require('../models/userModel'),
+         PartnersHasPermission = require('../models/partnersHasPermission'),
     partnersHasPermission = require('../models/partnersHasPermission'),
     bcrypt = require('bcrypt'),
     saltRounds = 10;
@@ -72,8 +73,10 @@ exports.updatePartner = async (req, res) => {
     } catch (e) {
         return res.status(400).json({msg: e.message})
     }
-    return res.status(400).json({msg: 'BAD REQUEST'})
 }
 exports.getPartner = async (req, res) => {
     return res.status(200).json(await Partners.findAll())
+}
+exports.getPartnerPermission = async (req, res) => {
+    return res.status(200).json(await PartnersHasPermission.findAll())
 }

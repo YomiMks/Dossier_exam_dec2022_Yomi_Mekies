@@ -1,10 +1,8 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
-import { Link } from "react-router-dom";
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import SaveIcon from '@mui/icons-material/Save';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -16,9 +14,6 @@ function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" to="https://mui.com/" >
-                Orange bleu
-            </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>
@@ -28,7 +23,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 const SignIn = (props) => {
-    const {loading, setLoading, msg, setMsg, severity, setSeverity, error, setError} = props
+    const {loading, setLoading, msg, setMsg, severity, setSeverity} = props
     const [open, setOpen] = useState(false);
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -64,7 +59,9 @@ const SignIn = (props) => {
             }))
             return true
         }else{
-            setError("Une erreur c'est produite");
+            setMsg("Une erreur c'est produite")
+            setSeverity('error')
+            setOpen(true)
             return false
         }
     }
@@ -117,12 +114,6 @@ const SignIn = (props) => {
                         >
                             Connexion
                         </LoadingButton >
-                        {
-                            error !== false &&
-                            <Typography component="h1" variant="h5">
-                                {error}
-                            </Typography>
-                        }
                     </Box>
                 </Box>
                 <CustomizedSnackbars msg={msg} severity={severity} open={open} setOpen={setOpen}/>

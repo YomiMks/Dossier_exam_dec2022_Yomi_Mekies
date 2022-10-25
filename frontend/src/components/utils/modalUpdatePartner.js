@@ -38,7 +38,9 @@ const ModalUpdatePartner = (props) => {
                     <TextField
                         required
                         id="outlined-required"
-                        shrink={false}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         label="Ville"
                         value={props.formValue.city}
                         onChange={(e) => props.handleChange('city', e.target.value)}
@@ -48,6 +50,10 @@ const ModalUpdatePartner = (props) => {
                         id="outlined-required"
                         label="Nom"
                         onChange={(e) => props.handleChange('name', e.target.value)}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={props.formValue.name}
                     />
                 </div>
                 <div style={{display: 'flex'}}>
@@ -56,6 +62,10 @@ const ModalUpdatePartner = (props) => {
                         id="outlined-required"
                         label="Email"
                         onChange={(e) => props.handleChange('email', e.target.value)}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={props.formValue.email}
                     />
                     <TextField
                         required
@@ -63,6 +73,10 @@ const ModalUpdatePartner = (props) => {
                         onChange={(e) => props.handleChange('password', e.target.value)}
                         label="Mot de passe"
                         type="password"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={props.formValue.password}
                     />
                 </div>
                 <div>

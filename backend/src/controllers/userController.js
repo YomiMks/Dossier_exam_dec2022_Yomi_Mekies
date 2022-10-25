@@ -1,4 +1,5 @@
 const User = require('../models/userModel'),
+    Partners = require('../models/partnersModel'),
     bcrypt = require('bcrypt'),
     saltRounds = 10;
 
@@ -34,5 +35,11 @@ exports.newUser = async (req, res) => {
  * @returns {Promise<*>}
  */
 exports.getUsers = async (req, res) => {
-    return res.status(200).json(await User.findAll())
+    return res.status(200).json(await User.findAll(
+        {
+            include: [
+                {model: Partners, as: 'user_partners'}
+            ]
+        }
+    ))
 }
