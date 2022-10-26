@@ -9,11 +9,14 @@ const f = require('./src/models/structuresHasPermission.js')
 const cors = require('cors')
 
 const app = express();
-
+app.use(cors({
+    origin: '*',
+    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
+}))
 //app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
-app.use(cors())
+
 require('./src/routes/index')(app)
 
 app.get('/', (req, res) => {
@@ -25,6 +28,6 @@ app.use((req, res) => {
     res.send('Page introuvable')
 })
 
-app.listen(8343, () => {
-    console.log('Serveur enabled on 8343')
+app.listen(5545, () => {
+    console.log('Serveur enabled on 5545')
 })

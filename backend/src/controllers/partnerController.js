@@ -59,6 +59,9 @@ exports.deletePartner = async (req, res) => {
     return res.status(400).json({msg: 'BAD REQUEST'})
 }
 exports.updatePartner = async (req, res) => {
+    console.log('je rentre ----------')
+    console.log('je rentre ----------', req.body)
+    console.log('je rentre ----------', req.params)
     const isExistPartner = await Partners.findOne({
         where : {
             id: req.params.id,
