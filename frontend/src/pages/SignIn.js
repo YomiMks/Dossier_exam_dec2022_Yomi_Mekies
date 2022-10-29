@@ -9,6 +9,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useState} from "react";
 import LoadingButton from '@mui/lab/LoadingButton';
 import CustomizedSnackbars from "../components/feedBack/SnackBarNotif";
+import {URL, PORT, ENDPOINT_API, ENDPOINT_AUTH} from "../constant";
 
 function Copyright(props) {
     return (
@@ -23,8 +24,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 const SignIn = (props) => {
-    const {loading, setLoading, msg, setMsg, severity, setSeverity} = props
-    const [open, setOpen] = useState(false);
+    const {loading, setLoading, msg, setMsg, severity, setSeverity, setOpenSnackBars} = props
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true)
@@ -33,7 +33,7 @@ const SignIn = (props) => {
             console.log('zef')
             setMsg("Champs vide")
             setSeverity('warning')
-            setOpen(true)
+            setOpenSnackBars(true)
         } else {
             await fetchApiLogin({
                 email: data.get('email'),
@@ -43,7 +43,7 @@ const SignIn = (props) => {
         setLoading(false)
     };
     const fetchApiLogin = async (data) => {
-        const response = await fetch('http://localhost:8343/api/auth/login',{
+        const response = await fetch(URL + ENDPOINT_API + ENDPOINT_AUTH,{
             method: "POST",
             headers: {
                 Accept: 'application/json',
@@ -61,7 +61,7 @@ const SignIn = (props) => {
         }else{
             setMsg("Une erreur c'est produite")
             setSeverity('error')
-            setOpen(true)
+            setOpenSnackBars(true)
             return false
         }
     }
@@ -116,7 +116,6 @@ const SignIn = (props) => {
                         </LoadingButton >
                     </Box>
                 </Box>
-                <CustomizedSnackbars msg={msg} severity={severity} open={open} setOpen={setOpen}/>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
             </Container>
         </ThemeProvider>

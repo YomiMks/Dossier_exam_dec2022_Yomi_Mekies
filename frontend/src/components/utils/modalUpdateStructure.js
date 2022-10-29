@@ -21,64 +21,72 @@ const style = {
     p: 4,
 };
 
-const ModalUpdatePartner = (props) => {
-    const [selected, setSelected] = useState([]);
-    const isSelected = (name) => selected.indexOf(name) !== -1;
+const modalUpdateStructure = (props) => {
     return (
         <Modal
-            open={props.open}
-            onClose={props.handleClose}
+            open={props.openModalUpdate}
+            onClose={props.handleCloseUpdate}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Modifier le partenaire {props.formValue.city}
+                    Modifier la structure {props.formValue.name}
                 </Typography>
                 <div style={{display: 'flex', marginTop: '16px', marginBottom: '16px'}}>
                     <TextField
                         required
                         id="outlined-required"
+                        label="Adresse"
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        value={props.formValue.city}
-
-                        label="Ville"
-                        onChange={(e) => props.handleChange('city', e.target.value)}
+                        value={props.formValue.address}
+                        onChange={(e) => props.handleChange('address', e.target.value)}
                     />
                     <TextField
                         required
                         id="outlined-required"
                         label="Nom"
-                        onChange={(e) => props.handleChange('name', e.target.value)}
                         InputLabelProps={{
                             shrink: true,
                         }}
                         value={props.formValue.name}
+                        onChange={(e) => props.handleChange('name', e.target.value)}
+                    />
+                    <TextField
+                        required
+                        id="outlined-required"
+                        label="Description"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={props.formValue.description}
+                        onChange={(e) => props.handleChange('description', e.target.value)}
                     />
                 </div>
+
                 <div style={{display: 'flex'}}>
                     <TextField
                         required
                         id="outlined-required"
                         label="Email"
-                        onChange={(e) => props.handleChange('email', e.target.value)}
                         InputLabelProps={{
                             shrink: true,
                         }}
                         value={props.formValue.email}
+                        onChange={(e) => props.handleChange('email', e.target.value)}
                     />
                     <TextField
                         required
                         id="outlined-required"
-                        onChange={(e) => props.handleChange('password', e.target.value)}
-                        label="Mot de passe"
-                        type="password"
                         InputLabelProps={{
                             shrink: true,
                         }}
                         value={props.formValue.password}
+                        onChange={(e) => props.handleChange('password', e.target.value)}
+                        label="Mot de passe"
+                        type="password"
                     />
                 </div>
                 <div>
@@ -90,33 +98,28 @@ const ModalUpdatePartner = (props) => {
                                             key={item.id}
                                             onChange={(e) => props.handlePushPermission(e.target.value)}
                                             control={
-                                            <Checkbox
-                                                checked={
-                                                    props.formValue.permissions.find(perm => perm.id === item.id) !== undefined
-                                                }
-                                                value={item.id}
-                                                color="primary"
-                                            />} label={item.Permission} />)
+                                                <Checkbox
+                                                    value={item.id}
+                                                    color="primary"
+                                                />} label={item.Permission} />)
                                 }
                             )
                         }
                     </FormGroup>
                 </div>
-                <Button variant="contained" onClick={props.handleClose}>Annuler</Button>
+                <Button variant="contained" onClick={props.handleCloseUpdate}>Annuler</Button>
                 <LoadingButton
                     type="submit"
                     variant="contained"
                     loadingPosition="end"
                     endIcon={<></>}
-                    onClick={(e) => props.handleUpdatePartner(e)}
+                    onClick={(e) => props.handleUpdateStructure(e)}
                     loading={props.loading}
                 >
                     Valider
                 </LoadingButton >
-                {/*<Button loaded={props.loading} variant="contained" onClick={(e) => props.handleUpdatePartner(e)}>Valider</Button>*/}
-                {props.error !== false && props.error}
             </Box>
         </Modal>
     );
 }
-export default ModalUpdatePartner;
+export default modalUpdateStructure;

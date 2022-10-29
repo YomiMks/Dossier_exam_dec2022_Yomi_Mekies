@@ -71,7 +71,7 @@ const headCells = [
     id: '2',
     numeric: true,
     disablePadding: false,
-    label: '',
+    label: 'Activer',
   },
   {
     id: '4',
@@ -250,10 +250,11 @@ const EnhancedTable = (props) => {
                             </TableCell>
                             <TableCell align="right">{row.city}</TableCell>
                             <TableCell align="right">
-                              <FormControlLabel
+                              <Switch checked={parseInt(row.enabled) !== 0} onChange={(e) => props.handleApiUpdateEnabled(e, row)} />
+                             {/* <FormControlLabel
                                   control={<Switch checked={dense} onChange={handleChangeDense} />}
                                   label="Activer"
-                              />
+                              />*/}
                             </TableCell>
                             <TableCell align="right">
                               <Button variant="contained" onClick={() => props.handleOpenUpdate(row)}>Modifier</Button>
@@ -263,6 +264,7 @@ const EnhancedTable = (props) => {
                             </TableCell>
                           </TableRow>
                       );
+
                     })}
                 {emptyRows > 0 && (
                     <TableRow

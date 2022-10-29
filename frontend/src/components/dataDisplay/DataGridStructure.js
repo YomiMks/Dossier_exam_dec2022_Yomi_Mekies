@@ -104,6 +104,24 @@ const headCells = [
         disablePadding: true,
         label: 'Partenaire',
     },
+    {
+        id: '2',
+        numeric: true,
+        disablePadding: false,
+        label: 'Activer',
+    },
+    {
+        id: '4',
+        numeric: true,
+        disablePadding: false,
+        label: '',
+    },
+    {
+        id: '5',
+        numeric: true,
+        disablePadding: false,
+        label: '',
+    },
 ];
 
 function EnhancedTableHead(props) {
@@ -116,22 +134,11 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts',
-                        }}
-                    />
-                </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
+                        padding={'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
@@ -176,39 +183,16 @@ const EnhancedTableToolbar = (props) => {
                 }),
             }}
         >
-            {numSelected > 0 ? (
-                <Typography
-                    sx={{ flex: '1 1 100%' }}
-                    color="inherit"
-                    variant="subtitle1"
-                    component="div"
-                >
-                    {numSelected} selected
-                </Typography>
-            ) : (
-                <Typography
-                    sx={{ flex: '1 1 100%' }}
-                    variant="h6"
-                    id="tableTitle"
-                    component="div"
-                >
-                    Structures
-                </Typography>
-            )}
+            <Typography
+                sx={{ flex: '1 1 100%' }}
+                variant="h6"
+                id="tableTitle"
+                component="div"
+            >
+                Structures
+            </Typography>
             {props.handleOpen && <Button variant="contained" onClick={props.handleOpen}>Ajouter</Button>}
-            {numSelected > 0 ? (
-                <Tooltip title="Delete">
-                    <IconButton>
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
-            )}
+
         </Toolbar>
     );
 };
@@ -280,7 +264,7 @@ export default function EnhancedTable(props) {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%', marginTop: '10%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} handleOpen={props.handleOpen} />
                 <TableContainer>
@@ -303,59 +287,47 @@ export default function EnhancedTable(props) {
                             {stableSort(props.structuresData, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.name)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
                                             tabIndex={-1}
                                             key={row.id}
-                                            selected={isItemSelected}
                                         >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': labelId,
-                                                    }}
-                                                />
-                                            </TableCell>
                                             <TableCell
                                                 component="th"
-                                                id={labelId}
                                                 scope="row"
-                                                padding="none"
                                             >
                                                 {row.address}
                                             </TableCell>
                                             <TableCell
-                                                component="th"
-                                                id={labelId}
-                                                scope="row"
-                                                padding="none"
+                                                align="right"
                                             >
                                                 {row.description}
                                             </TableCell>
                                             <TableCell
-                                                component="th"
-                                                id={labelId}
-                                                scope="row"
-                                                padding="none"
+                                                align="right"
                                             >
                                                 {row.name}
                                             </TableCell>
                                             <TableCell
-                                                component="th"
-                                                id={labelId}
-                                                scope="row"
-                                                padding="none"
+                                                align="right"
                                             >
                                                 {props.partnersData.find(partner => partner.id === row.id)?.city}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Switch checked={parseInt(row.enabled) !== 0} onChange={(e) => props.handleApiUpdateEnabled(e, row)} />
+                                                {/* <FormControlLabel
+                                  control={<Switch checked={dense} onChange={handleChangeDense} />}
+                                  label="Activer"
+                              />*/}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Button variant="contained" onClick={() => props.handleOpenUpdate(row)}>Modifier</Button>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Button variant="contained" onClick={() => props.fetchApiDeletePartner(row.id)}>Supprimer</Button>
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -382,10 +354,6 @@ export default function EnhancedTable(props) {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label="Dense padding"
-            />
         </Box>
     );
 }

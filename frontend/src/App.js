@@ -9,6 +9,8 @@ import Structures from "./pages/Structures";
 import CssBaseline from "@mui/material/CssBaseline";
 import ResponsiveAppBar from "./components/surface/ResponsiveAppBar";
 import CircularIndeterminate from "./components/feedBack/CircularIndeterminate";
+import {URL, PORT, ENDPOINT_API, ENDPOINT_PERMISSION, ENDPOINT_PARTNERS_PERMISSIONS, ENDPOINT_USER, ENDPOINT_PARTNERS} from "./constant";
+import CustomizedSnackbars from "./components/feedBack/SnackBarNotif";
 
 function App() {
   const navigation = useNavigate();
@@ -25,6 +27,7 @@ function App() {
   const [partnersData, setPartnersData] = useState([]);
   const [partnersPermissionsData, setPartnersPermisisonsData] = useState([]);
   const [usersData, setUsersData] = useState([]);
+  const [openSnackBars, setOpenSnackBars] = useState(false);
 
   useEffect(() => {
     setIsLogged(localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).isLogged)
@@ -37,13 +40,12 @@ function App() {
     fetchApiGetPartnersPermissions()
 
   }, []);
-
+// 'http://localhost:5545/api/permission'
   const fetchApiGetPermissions = async () => {
-    const response = await fetch('http://localhost:8343/api/permission', {
+    const response = await fetch(`${URL  +  ENDPOINT_API + ENDPOINT_PERMISSION}`, {
       method: "GET",
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
       },
     })
     if (response.ok) {
@@ -55,7 +57,7 @@ function App() {
     }
   }
   const fetchApiGetPartners = async () => {
-    const response = await fetch('http://localhost:8343/api/partners',{
+    const response = await fetch(`${URL +  ENDPOINT_API + ENDPOINT_PARTNERS}`,{
       method: "GET",
       headers: {
         Accept: 'application/json',
@@ -71,7 +73,7 @@ function App() {
     }
   }
   const fetchApiGetUser = async () => {
-    const response = await fetch('http://localhost:8343/api/user',{
+    const response = await fetch(`${URL  +  ENDPOINT_API + ENDPOINT_USER}`,{
       method: "GET",
       headers: {
         Accept: 'application/json',
@@ -87,7 +89,7 @@ function App() {
     }
   }
   const fetchApiGetPartnersPermissions = async () => {
-    const response = await fetch('http://localhost:8343/api/partners/permissions',{
+    const response = await fetch(`${URL +  ENDPOINT_API + ENDPOINT_PARTNERS_PERMISSIONS}`,{
       method: "GET",
       headers: {
         Accept: 'application/json',
@@ -112,7 +114,25 @@ function App() {
                 <ResponsiveAppBar user={user} />
                 <Routes>
                   <Route index element={<Dashboard partnersData={partnersData}/>} />
-                  <Route path={"/structures"} element={<Structures  permissionsData={permissionsData} partnersData={partnersData}/>} />
+                  <Route path={"/structures"} element={
+                    <Structures
+                        permissionsData={permissionsData}
+                        partnersPermissionsData={partnersPermissionsData}
+                        usersData={usersData}
+                        loading={loading}
+                        setLoading={setLoading}
+                        msgSuccess={msgSuccess}
+                        setMsgSuccess={setMsgSuccess}
+                        severity={severity}
+                        setMsg={setMsg}
+                        setSeverity={setSeverity}
+                        error={error}
+                        setError={setError}
+                        partnersData={partnersData}
+                        setPartnersData={setPartnersData}
+                        openSnackBars={openSnackBars}
+                        setOpenSnackBars={setOpenSnackBars}
+                    />} />
                   <Route path={"/partners"} element={
                     <Partners
                         partnersPermissionsData={partnersPermissionsData}
@@ -122,13 +142,19 @@ function App() {
                         msgSuccess={msgSuccess}
                         setMsgSuccess={setMsgSuccess}
                         severity={severity}
+                        setMsg={setMsg}
                         setSeverity={setSeverity}
                         error={error}
                         setError={setError}
                         partnersData={partnersData}
                         setPartnersData={setPartnersData}
+                        permissionsData={permissionsData}
+                        openSnackBars={openSnackBars}
+                        setOpenSnackBars={setOpenSnackBars}
+                    />} />
+                  <Route path={"/permissions"} element={
+                    <Permissions
                         permissionsData={permissionsData}/>} />
-                  <Route path={"/permissions"} element={<Permissions permissionsData={permissionsData}/>} />
                   <Route path={'*'} element={<Error />} />
                 </Routes>
               </div>
@@ -143,11 +169,14 @@ function App() {
                           msg={msg}
                           setMsg={setMsg}
                           severity={severity}
+                          openSnackBars={openSnackBars}
+                          setOpenSnackBars={setOpenSnackBars}
                           setSeverity={setSeverity}
                       />} />
                 <Route path={'*'} element={<Error />} />
               </Routes>
         }
+        <CustomizedSnackbars msg={msg} severity={severity} open={openSnackBars} setOpen={setOpenSnackBars}/>
       </div>
   );
 }
