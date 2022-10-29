@@ -17,8 +17,9 @@ const Dashboard = (props) => {
     ]
     const cellStructures = [{
         id: 1,
-        cell: 'Adresse'
-    }, {id: 2, cell: 'Nom'}, {id: 3, cell: 'Description'}]
+        cell: 'Adresse',
+        slug: 'address'
+    }, {id: 2, cell: 'Nom', slug: 'name'}, {id: 3, cell: 'Description', slug: 'description'}]
     return (
         <div>
             <div>
