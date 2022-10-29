@@ -99,6 +99,9 @@ const modalUpdateStructure = (props) => {
                                             onChange={(e) => props.handlePushPermission(e.target.value)}
                                             control={
                                                 <Checkbox
+                                                    checked={
+                                                        props.formValue.permissions.find(perm => perm.id === item.id) !== undefined
+                                                    }
                                                     value={item.id}
                                                     color="primary"
                                                 />} label={item.Permission} />)

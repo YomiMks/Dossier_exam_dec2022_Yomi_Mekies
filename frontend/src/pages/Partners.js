@@ -141,7 +141,6 @@ const Partners = (props) => {
             }
         )
         if(response.ok){
-            console.log("okokok", data)
             const dataU = partnersData.map((partner) => {
                 if (partner.id !== data.id){
                     return partner

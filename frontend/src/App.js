@@ -9,9 +9,19 @@ import Structures from "./pages/Structures";
 import CssBaseline from "@mui/material/CssBaseline";
 import ResponsiveAppBar from "./components/surface/ResponsiveAppBar";
 import CircularIndeterminate from "./components/feedBack/CircularIndeterminate";
-import {URL, PORT, ENDPOINT_API, ENDPOINT_PERMISSION, ENDPOINT_PARTNERS_PERMISSIONS, ENDPOINT_USER, ENDPOINT_PARTNERS} from "./constant";
+import {
+  URL,
+  PORT,
+  ENDPOINT_API,
+  ENDPOINT_PERMISSION,
+  ENDPOINT_PARTNERS_PERMISSIONS,
+  ENDPOINT_USER,
+  ENDPOINT_PARTNERS,
+  ENDPOINT_STRUCTURE
+} from "./constant";
 import CustomizedSnackbars from "./components/feedBack/SnackBarNotif";
-
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
 function App() {
   const navigation = useNavigate();
 
@@ -25,7 +35,9 @@ function App() {
   const [error, setError] = useState(false);
   const [severity, setSeverity] = useState('');
   const [partnersData, setPartnersData] = useState([]);
+  const [structureData, setStructureData] = useState([]);
   const [partnersPermissionsData, setPartnersPermisisonsData] = useState([]);
+  const [structuresPermissionsData, setStructuressPermisisonsData] = useState([]);
   const [usersData, setUsersData] = useState([]);
   const [openSnackBars, setOpenSnackBars] = useState(false);
 
@@ -34,11 +46,14 @@ function App() {
     setUser(localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).user)
   }, [localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).isLogged]);
   useEffect(() => {
+    setLoading(true)
     fetchApiGetPermissions()
     fetchApiGetPartners()
     fetchApiGetUser()
     fetchApiGetPartnersPermissions()
-
+    fetchApiGetStructure()
+    fetchApiGetStructuresPermissions()
+    setLoading(false)
   }, []);
 // 'http://localhost:5545/api/permission'
   const fetchApiGetPermissions = async () => {
@@ -104,21 +119,65 @@ function App() {
       return false
     }
   }
+  const fetchApiGetStructuresPermissions = async () => {
+    const response = await fetch(`${URL +  ENDPOINT_API + ENDPOINT_PARTNERS_PERMISSIONS}`,{
+      method: "GET",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    if(response.ok){
+      const result = await response.json()
+      setStructuressPermisisonsData(result)
+      return true
+    }else{
+      return false
+    }
+  }
+  const fetchApiGetStructure = async () => {
+    const response = await fetch(`${URL  +  ENDPOINT_API + ENDPOINT_STRUCTURE}`,{
+      method: "GET",
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    if(response.ok){
+      const result = await response.json()
+      setStructureData(result)
+      return true
+    }else{
+      return false
+    }
+  }
   return (
       <div className="App">
         <CssBaseline />
+        {
+          loading &&
+            <Box sx={{ width: '100%' }}>
+              <LinearProgress />
+            </Box>
+        }
         {
           isLogged
               ?
               <div>
                 <ResponsiveAppBar user={user} />
                 <Routes>
-                  <Route index element={<Dashboard partnersData={partnersData}/>} />
+                  <Route index element={
+                    <Dashboard
+                        structuresData={structureData}
+                        partnersData={partnersData}/>} />
                   <Route path={"/structures"} element={
                     <Structures
+                        setStructureData={setStructureData}
+                        structuresData={structureData}
                         permissionsData={permissionsData}
-                        partnersPermissionsData={partnersPermissionsData}
+                        structuresPermissionsData={structuresPermissionsData}
                         usersData={usersData}
+                        structureData={structureData}
                         loading={loading}
                         setLoading={setLoading}
                         msgSuccess={msgSuccess}

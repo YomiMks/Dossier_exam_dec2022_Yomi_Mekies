@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import DataGridStructure from '../components/dataDisplay/DataGridStructure';
 import {Container} from "@mui/material";
 import ModalStructure from "../components/utils/modalStructure";
-import {URL, PORT, ENDPOINT_API, ENDPOINT_STRUCTURE, ENDPOINT_PARTNERS} from "../constant";
+import {URL, ENDPOINT_API, ENDPOINT_STRUCTURE} from "../constant";
 import ModalUpdateStructure from "../components/utils/modalUpdateStructure";
 
 const Structures = (props) => {
-    const { partnersPermissionsData, usersData, loading, setLoading, msgSuccess, setMsgSuccess, severity, setMsg,
-        setSeverity, error, setError, partnersData, setPartnersData, permissionsData, setOpenSnackBars} = props
+    const { structuresData, setStructureData, structuresPermissionsData, usersData, loading, setLoading, msgSuccess, setMsgSuccess, severity, setMsg,
+        setSeverity, error, partnersData, permissionsData, setOpenSnackBars} = props
     const [open, setOpen] = useState(false);
     const [openModalUpdate, setOpenModalUpdate] = useState(false);
     const [formValue, setFormValue] = useState({
@@ -17,13 +17,11 @@ const Structures = (props) => {
         email: '',
         password: '',
         userId: localStorage.getItem('auth') && JSON.parse(localStorage.getItem('auth')).user.id,
-        partnersId: ''
+        partnersId: '',
+        permissions: []
     })
-    const [structuresData, setStructureData] = useState([]);
     const [formPermissionsValue, setFormPermissionsValue] = useState([]);
-    useEffect(() => {
-        fetchApiGetStructure();
-    }, []);
+
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -35,7 +33,7 @@ const Structures = (props) => {
     }
     const handleOpenUpdate = (row) => {
         let perms = []
-        let partnerPerms = partnersPermissionsData.filter(perm => perm.fk_partner_id === row.id)
+        let partnerPerms = structuresPermissionsData.filter(perm => perm.fk_structure_id === row.id)
         if (partnerPerms.length > 0){
             permissionsData.map(item => {
                 partnerPerms.map(perm => {
@@ -65,18 +63,26 @@ const Structures = (props) => {
 
     const handleAddStructure = (e) => {
         e.preventDefault()
+        setLoading(true)
         const fetchApi = fetchApiAddStructure(formValue)
         if (fetchApi){
             handleClose()
         }else {
-            setError("Une erreur c'est produit")
+            setMsg("Une erreur est survenue")
+            setSeverity('error')
+            setOpenSnackBars(true)
         }
+        setLoading(false)
     }
     const handleApiUpdate = (e) => {
         e.preventDefault()
         setLoading(true)
         const fetchApi = fetchApiUpdateStructure(formValue)
         if (fetchApi){
+            setMsg("Structure mis à jour avec succès")
+            setSeverity('success')
+            setOpenSnackBars(true)
+            setMsgSuccess('Structure mis à jour avec succès')
             handleCloseUpdate()
         }else {
             setMsg("Une erreur est survenue")
@@ -87,12 +93,14 @@ const Structures = (props) => {
     }
     const handleApiUpdateEnabled = (e, data) => {
         e.preventDefault()
+        setLoading(true)
         const fetchApi = fetchApiUpdateStructure({...data, enabled: data.enabled === true ? '0' : '1'})
         if (!fetchApi) {
             setMsg("Une erreur est survenue")
             setSeverity('error')
             setOpenSnackBars(true)
         }
+        setLoading(false)
     };
     const fetchApiAddStructure = async (data) => {
         const response = await fetch(`${URL +   ENDPOINT_API + ENDPOINT_STRUCTURE}`,{
@@ -112,33 +120,21 @@ const Structures = (props) => {
             return false
         }
     }
-    const fetchApiGetStructure = async () => {
-        const response = await fetch(`${URL  +  ENDPOINT_API + ENDPOINT_STRUCTURE}`,{
-            method: "GET",
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-        if(response.ok){
-            const result = await response.json()
-            setStructureData(result)
-            return true
-        }else{
-            return false
-        }
-    }
+
     const fetchApiDeleteStructure = async (id) => {
-        const response = await fetch(`${URL +  ENDPOINT_API + ENDPOINT_STRUCTURE}` + id ,{method: "DELETE",})
+        const response = await fetch(`${URL +  ENDPOINT_API + ENDPOINT_STRUCTURE}/${id}` ,{method: "DELETE",})
         if(response.ok){
-            const tmp = partnersData.filter(partner => partner.id !== id)
-            setPartnersData(tmp)
+            const tmp = structuresData.filter(structure => structure.id !== id)
+            setStructureData(tmp)
             setMsg("Structure supprimée avec succès")
             setOpenSnackBars(true)
             setSeverity('success')
             setMsgSuccess('Structure supprimée avec succès')
             return true
         }else{
+            setMsg("Une erreur est survenue")
+            setSeverity('error')
+            setOpenSnackBars(true)
             return false
         }
     }
@@ -155,21 +151,16 @@ const Structures = (props) => {
             }
         )
         if(response.ok){
-            console.log("okokok", data)
-            const dataU = structuresData.map((partner) => {
-                if (partner.id !== data.id){
-                    return partner
+            const dataU = structuresData.map((structure) => {
+                if (structure.id !== data.id){
+                    return structure
                 }else {
                     return {
                         ...data
                     }
                 }
             })
-            setMsg("Structure mis à jour avec succès")
-            setSeverity('success')
-            setOpenSnackBars(true)
-            setMsgSuccess('Structure mis à jour avec succès')
-            setPartnersData(dataU)
+            setStructureData(dataU)
             return true
         }else{
             return false
@@ -198,7 +189,9 @@ const Structures = (props) => {
                     handleOpen={handleOpen}
                     partnersData={partnersData}
                     structuresData={structuresData}
+                    handleApiUpdateEnabled={handleApiUpdateEnabled}
                     handleOpenUpdate={handleOpenUpdate}
+                    fetchApiDeleteStructure={fetchApiDeleteStructure}
                 />
             </Container>
             <ModalStructure
