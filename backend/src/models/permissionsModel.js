@@ -20,6 +20,6 @@ const Permission = sequelize.define('Permission', {
     timestamps: true
 });
 
-Permission.sync()
+//Permission.sync()
 console.log('dd', Permission === sequelize.models.Permission); // true
 module.exports = Permission;

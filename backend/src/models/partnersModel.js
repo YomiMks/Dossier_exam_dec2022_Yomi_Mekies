@@ -32,7 +32,7 @@ const Partners = sequelize.define('Partners', {
 sequelize.model.user.hasMany(Partners, {foreignKey: 'userId'})*/
 //sequelize.models.User.hasMany(sequelize.models.Partners, {foreignKey: 'userId', as: 'partner_user'})
 
-Partners.sync()
+//Partners.sync()
 
 console.log('Partners', Partners === sequelize.models.Partners); // true
 module.exports = Partners;

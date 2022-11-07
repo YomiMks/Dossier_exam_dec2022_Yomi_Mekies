@@ -41,6 +41,6 @@ Structures.belongsToMany(Permissions, {
     as: "permissions",
     foreignKey: 'fk_structure_id'
 })
-StructuresHasPermission.sync()
+//StructuresHasPermission.sync()
 
 module.exports = StructuresHasPermission

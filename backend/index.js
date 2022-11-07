@@ -1,18 +1,20 @@
 const express = require('express');
 const sequelize = require('./config/db.js');
-const userModel = require('./src/models/userModel.js')
-const partnersModel = require('./src/models/partnersModel.js')
-const permissionsModel = require('./src/models/permissionsModel.js')
-const structuresModel = require('./src/models/structuresModel.js')
-const d = require('./src/models/partnersHasPermission.js')
-const f = require('./src/models/structuresHasPermission.js')
+// const partnersModel = require('./src/models/partnersModel.js')
+// const permissionsModel = require('./src/models/permissionsModel.js')
+// const structuresModel = require('./src/models/structuresModel.js')
+// const d = require('./src/models/partnersHasPermission.js')
+// const f = require('./src/models/structuresHasPermission.js')
 const cors = require('cors')
+const PORT = 8080;
+const HOST = "217.160.145.221";
+
 
 const app = express();
-app.use(cors({
+/*app.use(cors({
     origin: '*',
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
-}))
+}))*/
 //app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
@@ -28,6 +30,12 @@ app.use((req, res) => {
     res.send('Page introuvable')
 })
 
-app.listen(3300, () => {
-    console.log('Serveur enabled on 3300')
+app.listen(PORT, HOST,(err) => {
+    if (err)
+    {
+        console.log("Error in server setup")
+    }else {
+        console.log(`Server running at http://${HOST}:${PORT}/`);
+    }
 })
+

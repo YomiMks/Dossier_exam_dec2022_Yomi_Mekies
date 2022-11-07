@@ -28,7 +28,7 @@ exports.newPartner = async (req, res) => {
             role: 'PARTNERS',
             partnersId: newPartner.id
         })
-        if(req.body?.permissions?.length > 0){
+        if(req.body.permissions.length > 0){
             for ( const res of req.body.permissions){
                 newPartnersHasPermission = await partnersHasPermission.create({
                     'fk_partner_id' : newPartner.id,

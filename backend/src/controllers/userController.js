@@ -18,8 +18,8 @@ exports.newUser = async (req, res) => {
             password: hash,
             role: req.body.role,
             brand: req.body.brand,
-            structureId: req.body.structureId ??= null,
-            partnersId: req.body.partnersId ??= null
+            structureId: req.body.structureId !== null ? req.body.structureId : null,
+            partnersId: req.body.partnersId !== null ? req.body.partnersId : null
         })
         return res.status(200).json({msg: 'OK', user: user})
     }catch (e){

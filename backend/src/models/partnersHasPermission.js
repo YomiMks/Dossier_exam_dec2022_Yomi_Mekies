@@ -41,6 +41,6 @@ Partners.belongsToMany(Permissions, {
     as: "permissions_partners",
     foreignKey: 'fk_partner_id'
 })
-PartnersHasPermission.sync()
+//PartnersHasPermission.sync()
 
 module.exports = PartnersHasPermission
