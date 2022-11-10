@@ -7,15 +7,15 @@ const sequelize = require('./config/db.js');
 // const f = require('./src/models/structuresHasPermission.js')
 const cors = require('cors')
 const PORT = 8080;
-const HOST = "217.160.145.221";
+const HOST = "localhost";
 
 
 const app = express();
-/*app.use(cors({
+app.use(cors({
     origin: '*',
-    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
-}))*/
-//app.use(cors());
+    methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
+}))
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
@@ -30,11 +30,10 @@ app.use((req, res) => {
     res.send('Page introuvable')
 })
 
-app.listen(PORT, HOST,(err) => {
-    if (err)
-    {
+app.listen(PORT, HOST, (err) => {
+    if (err) {
         console.log("Error in server setup")
-    }else {
+    } else {
         console.log(`Server running at http://${HOST}:${PORT}/`);
     }
 })

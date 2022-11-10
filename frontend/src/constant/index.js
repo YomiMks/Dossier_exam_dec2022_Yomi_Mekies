@@ -1,4 +1,4 @@
-export const PORT = 3300;
+export const PORT = 8080;
 export const URL = `http://localhost:${PORT}`
 export const ENDPOINT_API = '/api';
 export const ENDPOINT_PERMISSION = '/permission'

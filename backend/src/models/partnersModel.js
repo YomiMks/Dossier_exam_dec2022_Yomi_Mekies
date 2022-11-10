@@ -28,9 +28,6 @@ const Partners = sequelize.define('Partners', {
 }, {
     timestamps: true
 });
-/*Partners.belongsTo(sequelize.models.Partners, {foreignKey: 'userId', as: 'user_partner'})
-sequelize.model.user.hasMany(Partners, {foreignKey: 'userId'})*/
-//sequelize.models.User.hasMany(sequelize.models.Partners, {foreignKey: 'userId', as: 'partner_user'})
 
 //Partners.sync()
 
